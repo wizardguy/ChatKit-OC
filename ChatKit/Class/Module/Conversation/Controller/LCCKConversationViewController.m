@@ -639,6 +639,9 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     }];
 }
 
+
+static NSString *const LCCK_KEY_ALREADYLOGIN = @"LCCK_KEY_ALREADYLOGIN";
+
 - (void)sendWelcomeMessageIfNeeded:(BOOL)isFirstTimeMeet {
     //系统对话
     if (_conversation.members.count == 0) {
@@ -666,10 +669,15 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
     if (shouldSendWelcome) {
         [[LCCKUserSystemService sharedInstance] fetchCurrentUserInBackground:^(id<LCCKUserDelegate> user, NSError *error) {
             NSString *userName = user.name;
-            if (userName.length > 0 && (conversationType == LCCKConversationTypeGroup)) {
+            NSUserDefaults *defaultsGet = [NSUserDefaults standardUserDefaults];
+            BOOL isLogin = [defaultsGet boolForKey:LCCK_KEY_ALREADYLOGIN];
+            if (!isLogin && userName.length > 0 && (conversationType == LCCKConversationTypeGroup)) {
                 welcomeMessage = [NSString stringWithFormat:@"%@%@", LCCKLocalizedStrings(@"GroupWelcomeMessageWithNickName"), userName];
+                [self sendTextMessage:welcomeMessage];
+                
+                [defaultsGet setBool:YES forKey:LCCK_KEY_ALREADYLOGIN];
+                [defaultsGet synchronize];
             }
-            [self sendTextMessage:welcomeMessage];
         }];
     }
 }
