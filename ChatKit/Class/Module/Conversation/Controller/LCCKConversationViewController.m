@@ -519,7 +519,7 @@ NSString *const LCCKConversationViewControllerErrorDomain = @"LCCKConversationVi
             //如果被管理员踢出群之后，再进入该会话，本地可能有缓存，要清除掉，防止下次再次进入。
             [[LCCKConversationService sharedInstance] deleteRecentConversationWithConversationId:conversationId];
         }
-        conversationInvalidedHandler(conversationId, self, user, error);
+        !conversationInvalidedHandler ?: conversationInvalidedHandler(conversationId, self, user, error);
     };
     
     if (conversation && (conversation.creator.length > 0)) {
