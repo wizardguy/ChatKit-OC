@@ -40,7 +40,7 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
         blockUsers = users;
         [self cacheUsers:users];
     };
-    _fetchProfilesBlock(userIds, completionHandler);
+    !_fetchProfilesBlock ? : _fetchProfilesBlock(userIds, completionHandler);
     return blockUsers;
 }
 
