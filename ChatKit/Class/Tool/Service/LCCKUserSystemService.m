@@ -114,9 +114,14 @@ NSString *const LCCKUserSystemServiceErrorDomain = @"LCCKUserSystemServiceErrorD
     if (user) {
         return user;
     }
-    NSArray *users = [self getProfilesForUserIds:@[userId] error:theError];
-    if (users.count > 0) {
-        return users[0];
+    @try {
+        NSArray *users = [self getProfilesForUserIds:@[userId] error:theError];
+        if (users.count > 0) {
+            return users[0];
+        }
+    }
+    @catch (NSException *exception) {
+        NSLog(@"exception: %@", exception.description);
     }
     return nil;
 }
